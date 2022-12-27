@@ -1,0 +1,62 @@
+---
+title: "Homework 2"
+output: html_document
+date: "2022-12-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+Hotel = read.csv('/Users/pothula/Desktop/practice/601/601_Fall_2022/posts/_data/hotel_bookings.csv')
+
+summary(Hotel)
+```
+
+## Pivoting 
+
+This dataset doesn't require cleaning as each column represents a variable and a column a observation
+so no pivoting is needed 
+The data set has total of 32 cloumns each column describes a varibale and observation of the variable is provide in the rows.
+
+“hotel”: Describes the type of hotel                       
+ "is_canceled" : Informs us if the reservation is cancelled or not                
+ "lead_time" : Gives us a integer that describes the time Frame between when the room is booked to when they check in 
+ “arrival_date_year”: Gives us the year of arrival             
+ “arrival_date_month”: Gives us the month of arrival       
+ "arrival_date_week_number" : Gives us the week number of arrival    
+ 
+"arrival_date_day_of_month" : Gives us the date of arrival    
+ "stays_in_weekend_nights" : This variable describes how many nights the guest is going to stay on weekends    
+“stays_in_week_nights”:This variable describes how many nights the guest is going to stay on Weekdays    
+"adults" : No of adults going to stay                    
+"children" : No of children going to stay      
+“babies": No of babies going to stay                        
+ “meal”: This variable describes whether they had meals in the hotel or not                         “country”: Describes country of the guest                        
+“market_segment”: This variable describes whether they booked it online or directly                  “distribution_channel”: Decibel about the channel of booking          
+“is_repeated_guest”: This variable describes whether they came to same hotel before            “previous_cancellations”: This variable describes whether they cancelled before  
+“previous_bookings_not_canceled”: Variable describes previous bookings not canceled
+“reserved_room_type": Variable describes  reserved room type        
+"assigned_room_type" : Variable describes assigned room type 
+“booking_changes”:   Variable describes booking changes on room             
+
+# Potential reserach question 
+Is it necessary to book ahead?
+Does hotels charge extra for two beds?
+Does hotels offer free breakfast?
+Is there a restaurant in the hotel?
+
+
+```{r pressure, echo=FALSE}
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
