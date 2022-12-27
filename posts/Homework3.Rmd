@@ -1,0 +1,105 @@
+---
+title: "Untitled"
+output: html_document
+date: "2022-12-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+Hotel = read.csv('/Users/pothula/Desktop/practice/601/601_Fall_2022/posts/_data/hotel_bookings.csv')
+summary(Hotel)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+Hotel %>% 
+group_by(Hotel.hotel) %>%
+summarise(lead_time = mean(lead_time),
+         adults = mean(adults),
+         children = mean(children),
+         babies = mean(babies))
+hist(Hotel$lead_time)
+hist(log(Hotel$lead_time))
+hist(Hotel$adults)
+hist(Hotel$children)
+hist(Hotel$babies)
+hist(Hotel$is_canceled)
+hist(Hotel$hotel)
+hist(Hotel$arrival_date_year)
+hist(Hotel$arrival_date_month)
+hist(Hotel$arrival_date_week_number)
+hist(Hotel$stays_in_weekend_nights)
+hist(Hotel$stays_in_week_nights)
+hist(Hotel$meal)
+hist(Hotel$country)
+median(na.omit((bike_buyers$Income)))
+median(na.omit((bike_buyers$Age))) 
+bike_buyers_clean <- bike_buyers
+colSums(is.na(bike_buyers_clean))
+# Income replaced with Median
+bike_buyers_clean$Income[is.na(bike_buyers_clean$Income)] <- 
+  median(na.omit((bike_buyers$Income)))
+
+# Age replaced with Median
+bike_buyers_clean$Age[is.na(bike_buyers_clean$Age)] <- 
+  median(na.omit((bike_buyers$Age)))
+
+colSums(is.na(bike_buyers_clean))
+#mode function
+get_mode <- function(x) {                 
+  unique_x <- unique(x)
+  tabulate_x <- tabulate(match(x, unique_x))
+  unique_x[tabulate_x == max(tabulate_x)]
+}
+# Marital Status replaced with Mode
+bike_buyers_clean$Marital.Status[is.na(bike_buyers_clean$Marital.Status)] <- 
+  get_mode(bike_buyers$Marital.Status)
+
+# Gender replaced with Mode
+bike_buyers_clean$Gender[is.na(bike_buyers_clean$Gender)] <- 
+  get_mode(bike_buyers$Gender)
+
+# Children replaced with Mode
+bike_buyers_clean$Children[is.na(bike_buyers_clean$Children)] <- 
+  get_mode(bike_buyers$Children)
+
+# Home Owner replaced with Mode
+bike_buyers_clean$Home.Owner[is.na(bike_buyers_clean$Home.Owner)] <- 
+  get_mode(bike_buyers$Home.Owner)
+
+colSums(is.na(bike_buyers_clean))
+# Cars replaced with Mean
+bike_buyers_clean$Cars[is.na(bike_buyers_clean$Cars)] <- 
+  mean(bike_buyers$Cars, na.rm = TRUE)
+
+colSums(is.na(bike_buyers_clean))
+bike_buyers <- bike_buyers_clean
+plot(bike_buyers$Income, type= "p")
+ggplot(bike_buyers, aes(x = Age)) +
+  geom_histogram()
+plot(density(bike_buyers$Income), main='Income Density Spread')
+OutVals = boxplot(bike_buyers$Income)$out
+print(OutVals)
+
+which(bike_buyers$Income %in% OutVals)
+
+x = bike_buyers$Income [!(bike_buyers$Income %in% OutVals) ]
+boxplot(x)
+plot(pressure)
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
