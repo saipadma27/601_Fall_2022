@@ -1,0 +1,188 @@
+---
+title: "601_finalpro"
+author: "Sai Padma Pothula"
+date: "2022-12-21"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Introduction
+This data set describes about Bike buyers from Pacific, Europe and North America. Data can be collected from previous buyers records. Analysing and modelling these datasets gives us an idea of what kind of people are buying bikes.Based on this data, we can predict who would be likely to purchase a bike using a classification algorithm. Our potential target variable is “Purchased.Bike”, which is binary (Yes = 1, No = 0). It is not very easy to read this data because you should have a clear understanding on how certain variables are impacting some variables. This data will give us an insight on income, occupation, age, Marital status which I believe are major factors in purchasing a bike.
+I am interested to study this bike buyers dataset. However there might some difficulties to identify some patterns. I have never studied any data sets related to automobiles. I would like to have a hands on experience on automobile related things. I believe this will help me understand more about data. We will be analysing data like acquiring, examining, querying the data. Then, we will visualise the data and determine needs for cleaning that is the most important phase of any data project. After completion of data understanding phase, we will prepare the data. In the data preparation phase, we will determine how to use the data set. For example, correction, removing or replacing.
+
+Data Description
+The data has been provided in the form of a CSV file, which contains the following information:
+
+- ID - An identifier column for each record
+- Marital Status - Is the record for a person who is Married, or Single
+- Gender - Is the record for a person who is Male, Female, or NA (not given)
+- Income - Income level of the person. Values given in integer dollars
+- Children - Number of children for the person
+- Education - Education level of the person
+- Occupation - Occupation that the person currently has
+- Home Owner - Is the person a home owner (Yes) or not (No)? NA indicates no data available
+#- Cars - Number of cars that the person owns 
+- Commute Distance - Distance to commute to ????
+- Region - Region the person is from
+- Age - Age of the person
+- Purchased Bike - Did the person purchase a bike (Yes) or not? (No)
+
+Data Exploration:
+
+Exploratory data analysis is used for data analysis and investigate data sets, to summarise their data and its characteristics we use EDA, visualisation methods helps us to determine how to manipulate data sources to find the answers , making it easier for data scientists to discover patterns, spot anomalies, test a hypothesis, or check assumptions.
+
+EDA is primarily used to see what can the data reveal beyond the formal modelling or hypothesis testing task and provides a provides a better understanding of data set variables and the relationships between them. It can also help determine if the statistical techniques you are considering for data analysis are appropriate.
+For the purposes of building a supervised classification algorithm, we set our target variable as Purchased Bike, which is 1 if the person did purchase a bike and 0 if the person did not.
+
+Objectives of EDA:
+  
+To List of outliers
+To Estimates parameter and Uncertainties about those estimates
+List of all important factors
+Conclusions or assumptions as to whether certain individual factors are statistically essential
+A good predictive model
+
+
+We would now like to explore all the variables we have to understand their distributions, any outliers / missing values, and which are the best that can be used as feature variables.
+
+These have been explored in the Jupyter notebook, with relevant observations noted in the markdown cells.
+
+
+
+```{r}
+library('tidyverse')
+library('ggplot2')
+bike_buyers = read.csv('/Users/pothula/Desktop/practice/601/601_Fall_2022/posts/_data/bike_buyers.csv', header=T, na.strings='')
+bike_buyers
+```
+```{r}
+summary(bike_buyers)
+bike_buyers$Marital.Status <- as.factor(bike_buyers$Marital.Status)
+bike_buyers$Gender <- as.factor(bike_buyers$Gender)
+bike_buyers$Home.Owner <- as.factor(bike_buyers$Home.Owner)
+bike_buyers$Purchased.Bike <- as.factor(bike_buyers$Purchased.Bike)
+```
+
+
+```{r}
+str(bike_buyers)
+colSums(is.na(bike_buyers))
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+bike_buyers %>% 
+group_by(Purchased.Bike) %>%
+summarise(Income = mean(Income),
+         Children = mean(Children),
+         Age = mean(Age),
+         Cars = mean(Cars))
+hist(bike_buyers$Income)
+```
+```{r}
+hist(bike_buyers$Income)
+```
+
+```{r pressure, echo=FALSE}
+hist(bike_buyers$Age)
+
+```
+
+```{r}
+median(na.omit((bike_buyers$Income)))
+```
+```{r}
+median(na.omit((bike_buyers$Age))) 
+```
+
+```{r}
+bike_buyers_clean <- bike_buyers
+colSums(is.na(bike_buyers_clean))
+
+```
+The data set has null values so it has to be cleaned 
+Data cleaning is the process of fixing or removing incorrect, corrupted, incorrectly formatted, duplicate, or incomplete data within a dataset. When you combine many sources to gather data, the data can be duplicated or mislabeled. If data is incorrect, outcomes and algorithms are unreliable, even though they may look correct. There is no one absolute way to prescribe the exact steps in the data cleaning process because the processes will vary from dataset to dataset. We are using mean and mode methods in the process to fill the empty columns in the dataset 
+
+```{r}
+bike_buyers_clean$Income[is.na(bike_buyers_clean$Income)] <- 
+  median(na.omit((bike_buyers$Income)))
+```
+
+```{r}
+bike_buyers_clean$Age[is.na(bike_buyers_clean$Age)] <- 
+  median(na.omit((bike_buyers$Age)))
+```
+```{r}
+get_mode <- function(x) {                 
+  unique_x <- unique(x)
+  tabulate_x <- tabulate(match(x, unique_x))
+  unique_x[tabulate_x == max(tabulate_x)]
+}
+```
+```{r}
+bike_buyers_clean$Gender[is.na(bike_buyers_clean$Gender)] <- get_mode(bike_buyers$Gender)
+```
+```{r}
+bike_buyers_clean$Children[is.na(bike_buyers_clean$Children)] <- get_mode(bike_buyers$Children)
+```
+```{r}
+bike_buyers_clean$Home.Owner[is.na(bike_buyers_clean$Home.Owner)] <-get_mode(bike_buyers$Home.Owner)
+colSums(is.na(bike_buyers_clean))
+```
+```{r}
+bike_buyers_clean$Cars[is.na(bike_buyers_clean$Cars)] <- mean(bike_buyers$Cars, na.rm = TRUE)
+colSums(is.na(bike_buyers_clean))
+```
+```{r}
+counts <- table(bike_buyers$Cars, bike_buyers$Gender)
+barplot(counts, main = '',
+        xlab="Number of Gears",
+        legend = rownames(counts))
+```
+```{r}
+ggplot(bike_buyers, aes(x = Age)) + geom_histogram()
+```
+```{r}
+plot(bike_buyers$Income, type= "p")
+
+```
+```{r}
+ggplot(bike_buyers, aes(x = Age)) + geom_histogram()
+```
+```{r}
+pred1 <- ggplot(bike_buyers, aes(x = Age, y = Occupation))
+pred1 + geom_line(aes(color = Age))
+```
+
+```{r}
+boxplot(bike_buyers$Income, main = 'Income plot')
+```
+```{r}
+pred_value = boxplot(bike_buyers$Income)$out
+print(pred_value)
+
+which(bike_buyers$Income %in% pred_value)
+
+plot_fig1 = bike_buyers$Income [!(bike_buyers$Income %in% pred_value) ]
+boxplot(plot_fig1)
+```
+```{r}
+plot_fig1 = bike_buyers$Income [!(bike_buyers$Income %in% pred_value) ]
+boxplot(plot_fig1)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Conclusion / Summary
+We find that there is not much variation between the variables across the target variable. The people who have purchased bikes do not have significantly differing attributes versus those that do not.
+
+However, some notable observations are that those that purchased bikes tend to have lower number of children, and lower number of cars on average. These may be good variables to choose as our feature variables, when we begin the modelling exercise.
